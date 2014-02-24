@@ -127,14 +127,14 @@ Compared to Andersen (subset based method) it is less precise.
 
 Steensgaard introduces a simple language
 
-        S ::= x =  y                          // copy y into x
-            | x = &amp;y                      // x points y
-            | x = *y                          // load y into x
-            |*x =  y                          // store y into x
-            | x =  op(y...)                   // binary function
-            | x =  allocate(y)                // allocate on the heap
-            | x =  fun(a...) -> (r...) S*     // function definition
-            | x... = p(a...)                  // function call with multiple returns
+    S ::= x =  y                          // copy y into x
+        | x = &amp;y                      // x points y
+        | x = *y                          // load y into x
+        |*x =  y                          // store y into x
+        | x =  op(y...)                   // binary function
+        | x =  allocate(y)                // allocate on the heap
+        | x =  fun(a...) -> (r...) S*     // function definition
+        | x... = p(a...)                  // function call with multiple returns
 
 Note that this language captures a lot of the essence of pointer behavior in `C`.
 If one has the following C program for example:
@@ -295,7 +295,7 @@ For a node $n$ the transfer function $f_n$ is
 
 - *Available Expressions* --- Forward must problem
 	
-	gen[n] = {d_e | expression e is computed in BB_n and none of its
+    gen[n] = {d_e | expression e is computed in BB_n and none of its
 			  uses is redefined}
 	kill[n] = {d_v | BB_n contains a defintion of v}
 
