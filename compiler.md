@@ -58,7 +58,37 @@ Initialize `Def_IN(BB_i) = {}` and `Def_Out(BB_i) = Gen(BB_i)` and solve the fol
     Def_IN(BB_i) = U_{BB_p \in pred(BB_i)} Def_OUT(BB_p)
     Def_OUT(BB_i) = Gen(BB_i) U (Def_IN(BB_i) \ Kill(BB_i))
 
+This will calculate the `kill` and `gen` set for a basic IR language
  
+    ClearAll[kill]
+    kill[Statement[n_, Instruction["Store", {x_, ___}]]] := x
+    kill[BasicBlock[_, stmts_]] := DeleteDuplicates[kill /@ stmts]
+    kill[Program[bbs_]] := kill /@ bbs
+    kill[___] := {}
+    ClearAll[gen]
+    gen[Statement[n_, Instruction[_, {_, uses__}]]] := uses
+    gen[BasicBlock[_, stmts_]] := DeleteDuplicates[gen /@ stmts]
+    gen[Program[bbs_]] := gen /@ bbs
+    gen[___] := {}
+
+For a given program
+
+    prog = Program[{
+        BasicBlock[1, {
+          Statement[1, Instruction["Store", {x, p}]],
+          Statement[1, Instruction["Store", {z, p}]]
+        }],
+        BasicBlock[2, {
+          Statement[2, Instruction["Store", {x, q}]]
+        }],
+        BasicBlock[3, {
+          Statement[3, Instruction["Store", {z, x}]]
+        }]
+    }];
+
+The `kill` set for the basic blocks are `{{x, z}, {x}, {z}}` and the `gen` set are `{{p}, {q}, {x}}`. Then one can calculate the `in` and `out` sets by finding the fixed points using the above transfer function.
+
+
 ## Presentation
 
 ### Points-to Analysis in Almost Linear Time (Steensgaard)
