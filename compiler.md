@@ -27,6 +27,10 @@
 
 - *Dominance Frontier* --- 
 
+- *Def-Use Chain* --- 
+- 
+- *Use-Def Chain* --- 
+
 ## Presentation
 
 ### Points-to Analysis in Almost Linear Time (Steensgaard)
