@@ -547,6 +547,85 @@ The packing/unpacking is also slightly tricky.
 
 Packing and unpacking costs may dominate the SIMD operation, the SLP algorithm detects when packed data produced as a result of one computation can be used directly as a source in another computation, hiding some of the packing/unpacking costs.
 
+### A Fast Fourier Transform Compiler
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+
+
+### A Comparison of Empirical and Model-Driven Optimization
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+
+### Pin: Building Customized Program Analysis Tools with Dynamic Instrumentation
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+### Trace-based Just-in-Time Type Specialization for Dynamic Languages
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+
+### Improvements to Graph Coloring Register Allocation
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+
+### Automatic Generation of Peephole Superoptimizers
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+### Automatic Predicate Abstraction of C Programs
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+
+### Saturn: A Scalable Framework for Error Detection Using Boolean Satisfiability
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+### ABCD: Eliminating Array Bounds Checks on Demand
+
+#### Main Idea
+
+#### Algorithm
+
+#### Conclusions
+
+
 
 ## Other References
 
