@@ -5,26 +5,32 @@
 
 - *Interference graph* --- 
 
-- *Basic block* --- a sequence of statments with one program point
+- *Basic block* --- a sequence of statements with one program point
   of entry (at the start of the block) and one point of exit
   (at the end of the block) ... i.e. there is no side exists.
 
-- *Super block* --- 
+- *Super block* --- A basic block that allows for side exists.
 
 - *Normal loop* --- 
 
 - *Back edge* --- an edge $a -> b$ such that $b DOM a$
 
-- *SSA* --- 
+- *SSA* --- Single static assignment. Each use has only one corresponding def.
+One advantage of SSA is that it makes many optimizations simpler, for example there is no
+    anti- or output dependences in SSA representation.
 
 - *Extended SSA* --- 
 
-- *Dominator* --- a node $d$ dominates $n$ (written $d DOM n$ or $d \gg n$) if every path
-  from the start node to $n$ contains $d$
+- *Phi Functions* --- a phi function encodes which edges are being entered into the basic
+    block and picks values depending on which edge is entered.
 
+- *Dominator* --- a node $d$ dominates $n$ (written $d DOM n$ or $d \gg n$) if every path
+  from the start node to $n$ contains $d$. $d$ strictly dominates $n$ if $d DOM n$ and $d \neq n$.
+  
 - *Immediate Dominator* --- 
 
-- *Dominance Frontier* --- 
+- *Dominance Frontier* --- The dominance frontier of $x$ is the set of all nodes $w$
+    such that $x$ dominates the predecessor of $w$ and $x$ does not strictly dominate $w$.
 
 ## Presentation
 
@@ -46,6 +52,8 @@ Let $a$, $b$, and $c$ be program variables, we define:
 
 - *Object sensitivity* --- 
 
+- *Path sensitivity* ---
+
 - *Unification* --- 
 
 - *Heap Modeling* --- 
@@ -54,7 +62,40 @@ Let $a$, $b$, and $c$ be program variables, we define:
 
 #### Main Idea
 
+Compute the flow and context insensitive points-to set in linear time.
+This method was the first to be able to process hundreds of thousands of lines of C code.
+Compared to Andersen (subset based method) it is less precise.
+
 #### Algorithm
+
+Steensgaard introduces a simple language
+
+        S ::= x =  y                          // copy y into x
+            | x = &amp;y                      // x points y
+            | x = *y                          // load y into x
+            |*x =  y                          // store y into x
+            | x =  op(y...)                   // binary function
+            | x =  allocate(y)                // allocate on the heap
+            | x =  fun(a...) -> (r...) S*     // function definition
+            | x... = p(a...)                  // function call with multiple returns
+
+Note that this language captures a lot of the essence of pointer behavior in `C`.
+If one has the following C program for example:
+    
+        int func(int a, int b)
+
+He also introduces a simple type system:
+
+\begin{align*}
+\alpha &::= \tau \times \lambda \\
+\tau &::= \bot \times \mbox{ref}(\alpha) \\
+\lambda &::= \bot \times \mbox{lam}(\alpha_1 ... \alpha_n)(\alpha_{n+1} ... \alpha_{n+m}) \\
+\end{align*}
+
+The algorithm is based on unification.
+Written in datalog (prolog):
+
+    wellTyped(x = y) = pointsTo().
 
 #### Conclusions
 
@@ -63,6 +104,7 @@ Let $a$, $b$, and $c$ be program variables, we define:
 ### Data Dependences (High Performance Compilers for Parallel Computing Chapter 5)
 
 #### Definitions
+
 Let $S_1$ and $S_2$ be two statements, we define:
 
 - $IN(S)$ --- The set of variables used in $S_1$
@@ -141,6 +183,9 @@ Let $S_1$ and $S_2$ be two statements, we define:
 
 #### Main Idea
 
+Seperation of concerns means that one can develop passes that do not depend on each
+    other --- essentially turning the optimization phases into a dataflow sequence.
+
 #### Algorithm
 
 #### Conclusions
@@ -161,7 +206,11 @@ Let $S_1$ and $S_2$ be two statements, we define:
 
 - *Constant Propagation* --- not distributive.
 
-#### Algorithm
+#### Definitions
+
+- *Post order* --- vist left child, right child, then root
+
+- *Reverse post order* --- reverse order of the post order traversal
 
 - *Reaching Definitions* --- a forward may problem
     
@@ -213,6 +262,37 @@ For a node $n$ the transfer function $f_n$ is
 
 - *Constant Propagation* ---
 
+#### Algorithm
+
+
+Kam and Ullman introduce a depth-first iterative algorithm
+
+    In[start] = \bot
+    for j = 2 to k do
+        // if \top \in L use In[j] = \top
+        In[j] = /\_{q \in pred*(j)} f_q(In[q])
+    end
+    change = true
+    while change do
+        change = false
+        for j = 2 to k do // in rPostOrder
+            temp = /\_{q \in pred(j)} f_q(In[q])
+            if temp != In[j]
+                change = true
+                In[j] = temp
+            end
+    end
+
+With `pred*` defined as `{q | q \in pred(j) and q < j in rPostOrder}`.
+
+Kildall proved that this iterative algorithm converges and computes the
+    maximum fixed point solution.
+He also showed that `In[n] <= MOP[n]` meaning that the solution is safe and 
+    if the transfer function is distributive then `MOP = MFP`.
+Kam and Ulman showed that if the transfer function is monotone, then `MOP >= MFP`.
+
+In practice it takes a few iterations for this loop to converge.
+
 #### Conclusions
 
 ### Lazy Code Motion
@@ -227,7 +307,16 @@ For a node $n$ the transfer function $f_n$ is
 
 #### Main Idea
 
+Compute where to place the $\phi$ functions by computing the dominance frontier of the node.
+
 #### Algorithm
+
+A node $n$ dominates $m$ if all paths from the start node to $m$ contain the node $n$.
+The dominance graph is composed of
+
+We can compute the dominance graph using a dataflow algorithm with $Dom(start) = \emptyset$ and 
+    $Dom(n) = 
+
 
 #### Conclusions
 
@@ -262,12 +351,30 @@ You can express data flow equations and pointer analysis using
 
 #### Main Idea
 
+Collect chunks of expressions and fuse them to generate vector instructions.
+For example, if you have the following set of statements:
+
+    a = x + s
+    b = y + t
+    c = z + u
+    d = w + v
+
+then the compiler pass will generate use vectorized add
+
+    xyzw = float4(x,y,z,w)
+    stuv = float4(s,t,u,v)
+    abcd = xyzw + stuv
+
+The difficultly happens when you have divergence and have to 
+    introduce dummy expressions to faciliate vectorization.
+The packing/unpacking is also slightly tricky.
+
 #### Algorithm
 
 #### Conclusions
 
 
-## References
+## Other References
 
 ### Pointer Analysis: Haven’t We Solved This Problem Yet?
 
