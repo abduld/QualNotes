@@ -8,7 +8,7 @@
 - *Basic block* --- a sequence of statements with one program point
   of entry (at the start of the block) and one point of exit
   (at the end of the block) ... i.e. there is no side exists.
-  More formally, a sequence of statements $s_0, s_1, ..., s_n$ form a basic block iff $s_i$ dominates $s_j$ if $i > j$ and $s_i$ is not a jump when $i < n$.
+  More formally, a sequence of statements $s_0, s_1, \ldots, s_n$ forms a basic block iff $s_i$ dominates $s_j$ if $i > j$ and $s_i$ is not a jump when $i < n$.
 
 - *Super block* --- a basic block with side exists allowed. Can be used to optimize program layout (avoid unessary jumps).
 
@@ -31,10 +31,34 @@
 - *Dominance Frontier* --- The dominance frontier of $x$ is the set of all nodes $w$
     such that $x$ dominates the predecessor of $w$ and $x$ does not strictly dominate $w$.
 
-- *Def-Use Chain* --- 
-- 
-- *Use-Def Chain* --- 
+- *Def-Use Chain* ---  A datastructure consisting of a a definition $D$ of the variable and all uses $U$ of that variable that can reach the use without being killed.
 
+- *Use-Def Chain* --- A datastructure consisting of a a use $U$ of the variable and all definitions $D$ of that variable that may reach the use without being killed. Note $d \in Defs(u) iff u \in Uses(d)$. 
+The $Defs$ chain can be computed using reaching definitions and then inverted
+to compute the $Uses$.
+For example
+    
+    1. if (cond)
+    2.      x = ...
+    3. else
+    4.      x = ...
+    5. end
+    6. ... = x
+
+then $Use-Def(x_6) = {S_6} \times {S_2, S_4}$ since both $defs$ in $S_2$ and $S_4$ can reach $S_6$
+
+Both the $def-use$ and $use-def$ can be computed using data flow analysis.
+For the $def-use$ set, we can compute the set 
+    
+    Let Kill(S_i : x = ...) = {S_i : x}
+    Let Gen(S_i : ... = x) = {S_i : x}
+
+Initialize `Def_IN(BB_i) = {}` and `Def_Out(BB_i) = Gen(BB_i)` and solve the following iteratively:
+
+    Def_IN(BB_i) = U_{BB_p \in pred(BB_i)} Def_OUT(BB_p)
+    Def_OUT(BB_i) = Gen(BB_i) U (Def_IN(BB_i) \ Kill(BB_i))
+
+ 
 ## Presentation
 
 ### Points-to Analysis in Almost Linear Time (Steensgaard)
@@ -325,7 +349,7 @@ A node $n$ dominates $m$ if all paths from the start node to $m$ contain the nod
 The dominance graph is composed of
 
 We can compute the dominance graph using a dataflow algorithm with $Dom(start) = \emptyset$ and 
-    $Dom(n) = 
+    $Dom(n) = $
 
 
 #### Conclusions
@@ -426,7 +450,6 @@ The algorithm then flows the existing $def-use$ chains of existing entries.
 
 The algorithm then flows the existing $use-def$ chains of existing entries. 
 
-	Packed
 	(1) : a = b + c*d[i+0];
 	(4) : x = y + z*d[i+1];
 	
