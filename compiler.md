@@ -628,6 +628,20 @@ They mention a few advantages of the special purpose FFTW compiler:
 
 #### Main Idea
 
+#### Notes
+
+* A common problem is all *SAT* based solvers is their inability to analyze loops. That's because it is not possibel in most cases to construct a finite boolean formula representing a fully unrolled loop.
+
+* The following statements about a flowgraph are equivalent (http://rgrig.blogspot.com/2009/10/dtfloatleftclearleft-summary-of-some.html): 
+ It is reducible.
+    - Every back edge has its source dominated by its target, for all DFS trees.
+    - It has a unique DFS dag.
+    - It can be transformed into a single node by repeated application of the transformations T1 and T2: 
+        - T1: Remove a cycle-edge.
+        - T2: Pick a non-initial node y that has only one incoming edge x → y and glue nodes x and y.
+
+
+
 #### Algorithm
 
 #### Conclusions
