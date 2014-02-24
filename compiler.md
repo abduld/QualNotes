@@ -3,19 +3,20 @@
 
 ## Terms
 
-- *Interference graph* --- 
+- *Interference graph* --- A graph $G = (V,E)$ where $V$ is the set of variables and an edge $v_i \rightarrow v_j$ exists iff $v_i$ and $v_j$'s live ranges overlap. The interference graph is usually used to perform register allocation, since a register cannot be used for two different variables live a program point.
 
 - *Basic block* --- a sequence of statments with one program point
   of entry (at the start of the block) and one point of exit
   (at the end of the block) ... i.e. there is no side exists.
+  More formally, a sequence of statements $s_0, s_1, ..., s_n$ form a basic block iff $s_i$ dominates $s_j$ if $i > j$ and $s_i$ is not a jump when $i < n$.
 
-- *Super block* --- 
+- *Super block* --- a basic block with side exists allowed. Can be used to optimize program layout (avoid unessary jumps).
 
-- *Normal loop* --- 
+- *Normal loop* --- a loop with an edge $a -> b$ where the head of the edge dominates its tail ($b DOM a$)
 
 - *Back edge* --- an edge $a -> b$ such that $b DOM a$
 
-- *SSA* --- 
+- *SSA* --- A property of the IR form such that a virtual register is only assigned once. This implies that there is only one $def$ for each virtual register. It simplifies a lot of analysis. In live range analysis, for example, one needs to look at the preceeding $def$ to find the $def-use$ chain.
 
 - *Extended SSA* --- 
 
@@ -141,7 +142,13 @@ Let $S_1$ and $S_2$ be two statements, we define:
 
 #### Main Idea
 
+Simplify compiler development by introducing a seperation of concerns.
+This just means that you make each part of the compiler into an independent component that you can debug and optimize seperatly.
+The downside of seperation of concerns is that you may have to compute a pass more than once.
+
 #### Algorithm
+
+None.
 
 #### Conclusions
 
@@ -164,38 +171,38 @@ Let $S_1$ and $S_2$ be two statements, we define:
 #### Algorithm
 
 - *Reaching Definitions* --- a forward may problem
-    
-        gen[n] = {d_v | variable v is defined in BB_n and is not
-                  followed within n by another defintion v}
-        kill[n] = {d_v | BB_n contains a defintion of v}
+	
+	gen[n] = {d_v | variable v is defined in BB_n and is not
+			  followed within n by another defintion v}
+	kill[n] = {d_v | BB_n contains a defintion of v}
 
-        In[n]  = { null if BB_n = start
-                 { U_{p \in pred} Out[p]
-        Out[n] = gen[n] U (In[n] \ Kill[n])
+	In[n]  = { null if BB_n = start
+			 { U_{p \in pred} Out[p]
+	Out[n] = gen[n] U (In[n] \ Kill[n])
 
 One can represent this as a lattice with
 $L = 2^u$ with $u$ being the set of all variables along with their labels generated in the procedure ($variable \times label$).
 The meet operator $\wedge$ is $\cup$ and $\bot$ is the empty set $\emptyset$ and $\top$ being the set
-    of all expressions $u$.
+	of all expressions $u$.
 For a node $n$ the transfer function $f_n$ is 
-    $f_n = Gen_{var}[n] \cup (x \cap \bar{Kill_{var}[n]})$
+	$f_n = Gen_{var}[n] \cup (x \cap \bar{Kill_{var}[n]})$
 
 - *Available Expressions* --- Forward must problem
-    
-        gen[n] = {d_e | expression e is computed in BB_n and none of its
-                  uses is redefined}
-        kill[n] = {d_v | BB_n contains a defintion of v}
+	
+	gen[n] = {d_e | expression e is computed in BB_n and none of its
+			  uses is redefined}
+	kill[n] = {d_v | BB_n contains a defintion of v}
 
-        In[n]  = { null if BB_n = start
-                 { \cap_{p \in pred} Out[p]
-        Out[n] = gen[n] U (In[n] \ Kill[n])
+	In[n]  = { null if BB_n = start
+			 { \cap_{p \in pred} Out[p]
+	Out[n] = gen[n] U (In[n] \ Kill[n])
 
 One can represent this as a lattice with
 $L = 2^u$ with $u$ being the set of all expressions computed in the procedure.
 The meet operator $\wedge$ is $\cap$ and $\bot$ is the empty set $\emptyset$ and $\top$ being the set
-    of all expressions $u$.
+	of all expressions $u$.
 For a node $n$ the transfer function $f_n$ is 
-    $f_n = Gen_{expression}[n] \cup (x \cap \bar{Kill_{expression}[n]})$
+	$f_n = Gen_{expression}[n] \cup (x \cap \bar{Kill_{expression}[n]})$
 
 - *Dominator* --- Forward must problem
 
@@ -239,17 +246,17 @@ Represent data flow as a CFL and use reachability to compute
 	the solution.
 The following program, for example,
 
-		func p(g) {
-			return g + 1;
-		}
-		int x = 1;
-		int y = 1;
-		p(x);
-		p(y);
+	func p(g) {
+		return g + 1;
+	}
+	int x = 1;
+	int y = 1;
+	p(x);
+	p(y);
 
 is represented by
 	
-		x = 1 ; y = 1 ; (_p x + 1 )_p (_p y + 1 )_p
+	x = 1 ; y = 1 ; (_p x + 1 )_p (_p y + 1 )_p
 
 You can express data flow equations and pointer analysis using
 	CFL reachability.
@@ -262,10 +269,119 @@ You can express data flow equations and pointer analysis using
 
 #### Main Idea
 
+Construct SLP expressions that can be mapped onto SIMP operations by looking at statements within a basic block and combining them if they use the same operation.
+Optimizations in the scheduler can be made to avoid packing/unpacking of the data.
+
+#### Definitions
+
+* *Isomorphic Statements* --- are statments that perform the same operations in the same order. The SLP algorithm executes these statments in parallel using a technique called *statement packing*. For example:
+
+	a = b + c * z[i + 0]
+	d = e + f * z[i + 1]
+	r = s + t * z[i + 2]
+	w = x + y * z[i + 3]
+
+can be transformed to
+
+	{a, d, r, w} = {b, e, s, x} +Simd {c, f, t, y} *Simd {z[i+0], z[i+1], z[i+2], z[i+3]}
+
+* A *pack* is an $n$-tuple, $\langle s_1, \ldots, s_n \rangle$, with $s_1, \ldots, s_n$ are independent isomorphic statements in a basic block.
+
+* A *PackSet* is a set of *packs*.
+
+* A *pair* is a *pack* of size two $\rangle s_{left}, s_{right} \rangle$.
+
+* *Vectorization* is a special case of *SLP* where you try to vectorize the same statement across loop iterations. *SLP* tries to vectorize different statements within the same loop iteration.
+
 #### Algorithm
+
+A high level flow of the transformation is:
+
+1. Unroll loop to transform vector parallelism into SLP
+2. Alignment analysis to align each load and store --- some architectures do not allow unaligned memory accesses
+3. Transform IR into low level form and perform a series of standard compiler optimizations.
+
+The SLP detection/transformation algorithm starts by by looking at independent pairs of statments that contain adjacent memory references. This is done using alignment information and array analysis (in practice nearly every memory reference is adjacent to at most two other references). The statements on the right are transformed into the ones on the left (Identify adjacent memory references).
+	
+						      UnPacked				Packed
+	(1): a = b + c*d[i+0];	  (2) : c = 3;			(1) : a = b + c*d[i+0];
+	(2): c = 3;				  (3) : b = a + c;		(4) : x = y + z*d[i+1];
+	(3): b = a + c;			  (5) : z = 2;	 
+	 					  	  (6) : y = x + z;		(4) : x = y + z*d[i+1];
+	(4): x = y + z*d[i+1];    (8) : u = 1;			(7) : s = t + u*d[i+2];
+	(5): z = 2;				  (9) : t = s + u;
+	(6): y = x + z;
+	
+	(7): s = t + u*d[i+2];
+	(8): u = 1;
+	(9): t = s + u;					
+
+
+The algorithm then flows the existing $def-use$ chains of existing entries. 
+
+	UnPacked			Packed
+	(2) : c = 3;		(1) : a = b + c*d[i+0];
+						(4) : x = y + z*d[i+1];
+	(5) : z = 2;	
+						(6) : x = y + z*d[i+1];
+	(6) : u = 1;		(7) : s = t + u*d[i+2];
+				
+						(3) : b = a + c;
+						(6) : y = x + z;
+	
+						(6) : y = x + z;
+						(9) : t = s + u;
+
+The algorithm then flows the existing $use-def$ chains of existing entries. 
+
+	Packed
+	(1) : a = b + c*d[i+0];
+	(4) : x = y + z*d[i+1];
+	
+	(6) : x = y + z*d[i+1];
+	(7) : s = t + u*d[i+2];
+	
+	(3) : b = a + c;
+	(6) : y = x + z;
+	
+	(6) : y = x + z;
+	(9) : t = s + u;
+	
+	(2) : c = 3;
+	(5) : z = 2;
+	
+	(5) : z = 2;
+	(6) : u = 1;
+
+The algorithm then merges groups containing the same operations
+
+
+	(1) : a = b + c*d[i+0];
+	(4) : x = y + z*d[i+1];
+	(7) : s = t + u*d[i+2];
+	
+	(3) : b = a + c;
+	(6) : y = x + z;
+	(9) : t = s + u;
+	
+	(2) : c = 3;
+	(5) : z = 2;
+	(6) : u = 1;
+
+The scheduler then looks at the dependence and schedules the operations as SIMD instructions
+
+	{a, x, s} = {b, y, t} + {c, z, u} * {d[i+0], d[i+1], d[i+2]}
+	{c, z, u} = {3, 2, 1}
+	{b, y, t} = {a, x, s} + {c, z, u}
+
+#### Implementation
+
+
 
 #### Conclusions
 
+
+Packing and unpacking costs may dominate the SIMD operation, the SLP algorithm detects when packed data produced as a result of one computation can be used directly as a source in another computation, hiding some of the packing/unpacking costs.
 
 ## References
 
@@ -276,4 +392,3 @@ You can express data flow equations and pointer analysis using
 #### Algorithm
 
 #### Conclusions
-
