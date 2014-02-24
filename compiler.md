@@ -12,9 +12,9 @@
 
 - *Super block* --- a basic block with side exists allowed. Can be used to optimize program layout (avoid unessary jumps).
 
-- *Normal loop* --- a loop with an edge $a -> b$ where the head of the edge dominates its tail ($b DOM a$)
+- *Normal loop* --- a loop with an edge $a \rightarrow b$ where the head of the edge dominates its tail ($b \mbox{ DOM } a$)
 
-- *Back edge* --- an edge $a -> b$ such that $b DOM a$
+- *Back edge* --- an edge $a \rightarrow b$ such that $b \mbox{ DOM } a$
 
 - *SSA* --- A property of the IR form such that a virtual register is only assigned once. This implies that there is only one $def$ for each virtual register. It simplifies a lot of analysis. In live range analysis, for example, one needs to look at the preceeding $def$ to find the $def-use$ chain.
 
@@ -23,8 +23,8 @@
 - *Phi Functions* --- a phi function encodes which edges are being entered into the basic
     block and picks values depending on which edge is entered.
 
-- *Dominator* --- a node $d$ dominates $n$ (written $d DOM n$ or $d \gg n$) if every path
-  from the start node to $n$ contains $d$. $d$ strictly dominates $n$ if $d DOM n$ and $d \neq n$.
+- *Dominator* --- a node $d$ dominates $n$ (written $d \mbox{ DOM } n$ or $d \gg n$) if every path
+  from the start node to $n$ contains $d$. $d$ strictly dominates $n$ if $d \mbox{ DOM } n$ and $d \neq n$.
   
 - *Immediate Dominator* --- 
 
@@ -277,14 +277,16 @@ Seperation of concerns means that one can develop passes that do not depend on e
 - *Reverse post order* --- reverse order of the post order traversal
 
 - *Reaching Definitions* --- a forward may problem
-	
-	gen[n] = {d_v | variable v is defined in BB_n and is not
-			  followed within n by another defintion v}
-	kill[n] = {d_v | BB_n contains a defintion of v}
 
-	In[n]  = { null if BB_n = start
-			 { U_{p \in pred} Out[p]
-	Out[n] = gen[n] U (In[n] \ Kill[n])
+~~~~~~~~~~~~
+gen[n] = {d_v | variable v is defined in BB_n and is not
+		  followed within n by another defintion v}
+kill[n] = {d_v | BB_n contains a defintion of v}
+
+In[n]  = { null if BB_n = start
+		 { U_{p \in pred} Out[p]
+Out[n] = gen[n] U (In[n] \ Kill[n])
+~~~~~~~~~~~~
 
 One can represent this as a lattice with
 $L = 2^u$ with $u$ being the set of all variables along with their labels generated in the procedure ($variable \times label$).
@@ -294,14 +296,16 @@ For a node $n$ the transfer function $f_n$ is
 	$f_n = Gen_{var}[n] \cup (x \cap \bar{Kill_{var}[n]})$
 
 - *Available Expressions* --- Forward must problem
-	
-    gen[n] = {d_e | expression e is computed in BB_n and none of its
-			  uses is redefined}
-	kill[n] = {d_v | BB_n contains a defintion of v}
 
-	In[n]  = { null if BB_n = start
-			 { \cap_{p \in pred} Out[p]
-	Out[n] = gen[n] U (In[n] \ Kill[n])
+~~~~~~~~~~~~
+gen[n] = {d_e | expression e is computed in BB_n and none of its
+		  uses is redefined}
+kill[n] = {d_v | BB_n contains a defintion of v}
+
+In[n]  = { null if BB_n = start
+		 { \cap_{p \in pred} Out[p]
+Out[n] = gen[n] U (In[n] \ Kill[n])
+~~~~~~~~~~~~
 
 One can represent this as a lattice with
 $L = 2^u$ with $u$ being the set of all expressions computed in the procedure.
@@ -551,7 +555,18 @@ Packing and unpacking costs may dominate the SIMD operation, the SLP algorithm d
 
 #### Main Idea
 
+They mention a few advantages of the special purpose FFTW compiler:
+
+* *Performance* --- They are able to generate very performant code that beats hand optimized code. There code is optimal containing over 2400 lines of code including 912 additions and 248 multiplications.
+* *Correctness* --- Since the algorithm is encoded in a high level language, and the code simplifications are simple algebraic rules, it is easy to prove correctness. In cases where the output was not correct, this was due to a bug in the compiler.
+* *Rapid Turnaround* --- They are able to modify the compiler and regenerate the entire library in a very short time frame.
+* *Effectiveness* --- Since the compiler is problem specific, it heavily optimize specific cases. The algebraic simplifications, for example, rely on the DFT being a linear transformation.
+* *Derive New Algorithm* --- Through a combination of fusing different algorithms for different input sizes, the `genfft` compiler was able to discover new algorithms.
+
+
 #### Algorithm
+
+#### Implementation
 
 #### Conclusions
 
