@@ -672,6 +672,13 @@ They mention a few advantages of the special purpose FFTW compiler:
 * Usually top $\top = \sqcup S$ and $\bot = \sqcap S$
 * A function $f : L \rightarrow L$ is *monotone* iff $\forall x, y \in S : x \sqsubseteq y \Rightarrow f(x) \sqsubseteq f(y)$. It is desirable for a lattice's transfer function to be *monotone* since it means that the meet over paths is equal to the maximal fixed point.
 
+#### Pointer Analysis
+
+##### Andersen's Algorithm
+
+##### Steensgaard's Algorithm
+
+
 #### Live Analysis
 
 A monotone framework $L = (2^{\lbrace vars \rbrace}, \subseteq)$ with $In(BB) = \cup_{w \in succ(BB)} Out(w)$ and $Out(BB) = Gen(BB) \cup (In(BB) \backslash Kill(BB))$.
