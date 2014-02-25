@@ -1,0 +1,343 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     11809,        334]
+NotebookOptionsPosition[     11032,        304]
+NotebookOutlinePosition[     11379,        319]
+CellTagsIndexPosition[     11336,        316]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"prog", "=", 
+   RowBox[{"Program", "[", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"BasicBlock", "[", 
+       RowBox[{
+        RowBox[{"\"\<Id\>\"", "->", "1"}], ",", 
+        RowBox[{"\"\<Parent\>\"", "\[Rule]", " ", "Null"}], ",", 
+        RowBox[{"\"\<Instructions\>\"", "\[Rule]", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Instruction", "[", 
+            RowBox[{"\"\<Store\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<x\>\"", ",", "\"\<y\>\""}], "}"}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Instruction", "[", 
+            RowBox[{"\"\<Store\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<y\>\"", ",", "\"\<z\>\""}], "}"}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Instruction", "[", 
+            RowBox[{"\"\<Branch\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<y\>\"", ",", "2", ",", "3"}], "}"}]}], "]"}]}], 
+          "\[IndentingNewLine]", "}"}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"BasicBlock", "[", 
+       RowBox[{
+        RowBox[{"\"\<Id\>\"", "\[Rule]", "2"}], ",", 
+        RowBox[{"\"\<Parent\>\"", "\[Rule]", " ", "1"}], ",", 
+        RowBox[{"\"\<Instructions\>\"", "\[Rule]", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Instruction", "[", 
+            RowBox[{"\"\<Store\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<p\>\"", ",", "\"\<s\>\""}], "}"}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Instruction", "[", 
+            RowBox[{"\"\<Store\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<q\>\"", ",", "\"\<z\>\""}], "}"}]}], "]"}]}], 
+          "\[IndentingNewLine]", "}"}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"BasicBlock", "[", 
+       RowBox[{
+        RowBox[{"\"\<Id\>\"", "\[Rule]", "3"}], ",", 
+        RowBox[{"\"\<Parent\>\"", "\[Rule]", " ", "1"}], ",", 
+        RowBox[{"\"\<Instructions\>\"", "\[Rule]", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Instruction", "[", 
+            RowBox[{"\"\<Store\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<y\>\"", ",", "\"\<s\>\""}], "}"}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Instruction", "[", 
+            RowBox[{"\"\<Store\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<q\>\"", ",", "\"\<z\>\""}], "}"}]}], "]"}]}], 
+          "\[IndentingNewLine]", "}"}]}]}], "]"}]}], "\[IndentingNewLine]", 
+     "}"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6023017156802874`*^9, 3.602301905451399*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Live Analysis", "Section",
+ CellChangeTimes->{{3.6023021761040964`*^9, 3.6023021828088675`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", "gen", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gen", "[", 
+   RowBox[{"Instruction", "[", 
+    RowBox[{"_", ",", 
+     RowBox[{"{", 
+      RowBox[{"_", ",", "vars__"}], "}"}]}], "]"}], "]"}], ":=", 
+  RowBox[{"Sequence", "@@", 
+   RowBox[{"Select", "[", 
+    RowBox[{
+     RowBox[{"{", "vars", "}"}], ",", "StringQ"}], 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gen", "[", 
+   RowBox[{"BasicBlock", "[", 
+    RowBox[{
+     RowBox[{"\"\<Id\>\"", "\[Rule]", "i_"}], ",", "___", ",", 
+     RowBox[{"\"\<Instructions\>\"", "\[Rule]", "lst_"}]}], "]"}], "]"}], ":=", 
+  RowBox[{"gen", "/@", "lst"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gen", "[", 
+   RowBox[{"Program", "[", "bbs_", "]"}], "]"}], ":=", 
+  RowBox[{"gen", "/@", "bbs"}]}]}], "Input",
+ CellChangeTimes->{{3.60230190677734*^9, 3.602302106665656*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", "kill", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kill", "[", 
+   RowBox[{"Instruction", "[", 
+    RowBox[{"\"\<Store\>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{"x_", ",", "vars__"}], "}"}]}], "]"}], "]"}], ":=", 
+  "x"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kill", "[", 
+   RowBox[{"BasicBlock", "[", 
+    RowBox[{
+     RowBox[{"\"\<Id\>\"", "\[Rule]", "i_"}], ",", "___", ",", 
+     RowBox[{"\"\<Instructions\>\"", "\[Rule]", "lst_"}]}], "]"}], "]"}], ":=", 
+  RowBox[{"kill", "/@", "lst"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kill", "[", 
+   RowBox[{"Program", "[", "bbs_", "]"}], "]"}], ":=", 
+  RowBox[{"kill", "/@", "bbs"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kill", "[", "___", "]"}], ":=", 
+  RowBox[{"Sequence", "[", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.60230190677734*^9, 3.6023021555494576`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"ClearAll", "[", 
+  RowBox[{"bbs", ",", "pred", ",", "succ"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"populateBasicBlocks", "[", 
+   RowBox[{"Program", "[", "blocks_", "]"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "go", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"pred", "[", "_", "]"}], ":=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"succ", "[", "_", "]"}], ":=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"go", "[", 
+       RowBox[{"bb", ":", 
+        RowBox[{"BasicBlock", "[", 
+         RowBox[{
+          RowBox[{"\"\<Id\>\"", "\[Rule]", "i_"}], ",", 
+          RowBox[{"\"\<Parent\>\"", "\[Rule]", "p_"}], ",", "___"}], "]"}]}], 
+       "]"}], ":=", 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"bbs", "[", "i", "]"}], "=", "bb"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"p", "=!=", "Null"}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"pred", "[", "i", "]"}], "=", 
+             RowBox[{"AppendTo", "[", 
+              RowBox[{
+               RowBox[{"pred", "[", "i", "]"}], ",", "p"}], "]"}]}], ";", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"succ", "[", "p", "]"}], "=", 
+             RowBox[{"AppendTo", "[", 
+              RowBox[{
+               RowBox[{"succ", "[", "p", "]"}], ",", "i"}], "]"}]}], ";"}]}], 
+          "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"go", "/@", "blocks"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.6023022117854967`*^9, 3.602302363059198*^9}, {
+  3.602302417398887*^9, 3.602302602028336*^9}, {3.602302648492416*^9, 
+  3.6023027175245914`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"populateBasicBlocks", "[", "prog", "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.6023023092468853`*^9, 3.6023023101525335`*^9}, 
+   3.6023023707236633`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pred", "[", "2", "]"}]], "Input",
+ CellChangeTimes->{{3.602302573482013*^9, 3.6023025782233887`*^9}, {
+  3.602302690080027*^9, 3.60230271184052*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", "1", "}"}]], "Output",
+ CellChangeTimes->{{3.6023025755404787`*^9, 3.602302605523824*^9}, {
+  3.6023026875872498`*^9, 3.6023027201644583`*^9}}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"changed", "=", "True"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", 
+   RowBox[{"in", ",", "out"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"in", "[", "___", "]"}], ":=", 
+  RowBox[{"{", "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Module", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"go", ",", "new"}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"While", "[", 
+    RowBox[{
+     RowBox[{"changed", "\[Equal]", "True"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"changed", "=", "False"}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"go", "[", 
+        RowBox[{"bb", ":", 
+         RowBox[{"BasicBlock", "[", 
+          RowBox[{
+           RowBox[{"\"\<Id\>\"", "\[Rule]", "i_"}], ",", "___"}], "]"}]}], 
+        "]"}], ":=", "\[IndentingNewLine]", 
+       RowBox[{"(", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"in", "[", "i", "]"}], "=", 
+          RowBox[{"Union", "[", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"out", "/@", 
+             RowBox[{"succ", "[", "i", "]"}]}], "]"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"new", "=", 
+          RowBox[{"Union", "[", 
+           RowBox[{
+            RowBox[{"gen", "[", "bb", "]"}], ",", 
+            RowBox[{"Complement", "[", 
+             RowBox[{
+              RowBox[{"in", "[", "i", "]"}], ",", 
+              RowBox[{"kill", "[", "bb", "]"}]}], "]"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"new", "=!=", 
+            RowBox[{"out", "[", "i", "]"}]}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"out", "[", "i", "]"}], "=", "new"}], ";", 
+            "\[IndentingNewLine]", 
+            RowBox[{"changed", "=", "True"}]}]}], "\[IndentingNewLine]", 
+          "]"}]}], "\[IndentingNewLine]", ")"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"go", "/@", 
+       RowBox[{"(", 
+        RowBox[{"prog", "/.", 
+         RowBox[{"Program", "\[Rule]", "Sequence"}]}], ")"}]}]}]}], 
+    "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}], "Input",
+ CellChangeTimes->{{3.6023027645921106`*^9, 3.6023029837310944`*^9}, {
+  3.60230301819263*^9, 3.602303023363313*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"out", "[", "2", "]"}]], "Input",
+ CellChangeTimes->{{3.6023029876108575`*^9, 3.6023029933949766`*^9}, {
+  3.6023030297388506`*^9, 3.6023030384630623`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"s\"\>", ",", "\<\"z\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{{3.6023029886636057`*^9, 3.6023030388703704`*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"vars", "=", 
+   RowBox[{"Union", "[", 
+    RowBox[{"Flatten", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"gen", "[", "prog", "]"}], ",", 
+       RowBox[{"kill", "[", "prog", "]"}]}], "}"}], "]"}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.6023030628984585`*^9, 3.6023031386443872`*^9}}]
+}, Open  ]]
+},
+WindowSize->{767, 541},
+WindowMargins->{{281, Automatic}, {14, Automatic}},
+FrontEndVersion->"10.0 for Microsoft Windows (64-bit) (February 24, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2766, 63, 312, "Input"],
+Cell[CellGroupData[{
+Cell[3349, 87, 102, 1, 86, "Section"],
+Cell[3454, 90, 908, 25, 92, "Input"],
+Cell[4365, 117, 916, 24, 112, "Input"],
+Cell[5284, 143, 2082, 53, 292, "Input"],
+Cell[7369, 198, 191, 4, 31, "Input"],
+Cell[CellGroupData[{
+Cell[7585, 206, 173, 3, 31, "Input"],
+Cell[7761, 211, 171, 3, 31, "Output"]
+}, Open  ]],
+Cell[7947, 217, 2346, 59, 372, "Input"],
+Cell[CellGroupData[{
+Cell[10318, 280, 179, 3, 31, "Input"],
+Cell[10500, 285, 159, 3, 31, "Output"]
+}, Open  ]],
+Cell[10674, 291, 342, 10, 31, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
