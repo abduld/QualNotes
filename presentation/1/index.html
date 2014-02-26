@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Points-to Analysis in Almost Linear Time</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+<section>
+    <h1>Points-to Analysis in Almost Linear Time</h1>
+    <div>B. Steensgard (POPL 1996)</div>
+</section>
+<section>
+    <h2>Overview</h2>
+    <div>
+        <div style="text-align: left;">
+            <ul>
+                <li>Points-to analysis: definition, uses, and benefits</li>
+                <li>Steensgards language, typesystem, and algorithm</li>
+                <li>Results</li>
+                <li>Related and Recent work</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section>
+<h2>Points-to Analysis</h2>
+<div>
+<pre><code>x = &amp;y
+z = x
+g = &amp;y
+p = *y
+*y = p</code></pre>
+<div>
+    <div style="text-align: left;">
+        <ul>
+            <li>
+<code>x</code>
+<i> points to</i> <code> y</code>
+</li>
+            <li>
+Both <code>(x,z)</code> and <code>(x,g)</code> <i>alias </i></li>
+        <li>
+<code>p</code> loads <font face="monospace">y</font>
+    </li>
+    <li>
+        <font face="monospace">y</font> stores <font face="monospace">p</font>
+    </li>
+    <li>Pointer analysis facilitates further optimizations, when you can prove that two values $must$ alias or $must\ not$ alias.</li>
+    </ul>
+</div>
+</div>
+
+
+</section>
+    <section>
+        <h2>Steensgard's Language</h2>
+<div>
+    <pre><code>S ::= x =  y                       // copy y into x
+    | x = &amp;y                       // x points y
+    | x = *y                       // load y into x
+    |*x =  y                       // store y into x
+    | x =  op(y...)                // binary function
+    | x =  allocate(y)             // allocate on the heap
+    | x =  fun(a...) -&gt; (r...) S*  // function definition
+    | x... = p(a...)               // function call with multiple returns</code></pre>
+</div>
+
+<div style="text-align: left;">
+    <ul>
+        <li>Limits the kinds of pointer operations you can do on functions</li>
+<li>No complicated pointer operations like casting</li>
+<li>Example program</li>
+    </ul>
+</div>
+
+
+<div>
+    <pre><code>fact = fun(x) -&gt; (t)
+    if lessthan(x 1) then
+        r = 1
+    else
+        xminusone = subtract(x 1)
+        nextfact = fact(xminusone)
+        r = multiply(x nextfact)
+    fi    
+result = fact(10)</code></pre>
+</div>
+</section>
+<section>
+<h2>Steensgard's Type System</h2>
+<div style="text-align: left;">
+    <ul>
+        <li>Represent values, locations, and functions as types</li>
+    </ul>
+</div>
+
+\[
+\begin{eqnarray*}
+\alpha &amp;::=&amp; \tau \times \lambda \\
+\tau &amp;::=&amp; \bot \times \mbox{ref}(\alpha) \\
+\lambda &amp;::=&amp; \bot \times \mbox{lam}(\alpha_1 ... \alpha_n)(\alpha_{n+1} ... \alpha_{n+m}) \\
+\end{eqnarray*}
+\]
+
+<div>
+  <ul>
+      <li>Initialize everything to $\bot$</li>
+      <li>Define a partial order on the types to allow us to enforce operations only 
+          on values that may alias
+      </li>
+  </ul>
+</div>
+
+\[
+\begin{eqnarray*}
+(t_1 \unlhd t_2) \Leftrightarrow (t_1 = \bot) \vee (t_1 = t_2) \\
+(t_1 \times t_2) \unlhd (t_3 \times t_4) \Leftrightarrow (t_1 \unlhd t_3) \wedge (t_2 \unlhd t_4) \\
+\end{eqnarray*}
+\]
+
+</section>
+
+
+<section>
+<h2>Steensgard's Algorithm</h2>
+<div style="text-align: left; ">
+    <ul>
+        <li>Context insensitive, flow insensitive, unification based algorithm</li>
+        <li>Around $O(n)$ running time using Tarjan's union-find data structure</li>
+    </ul>
+</div>
+
+</section>
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x : \text{ref}(\alpha_1)\\
+&A \vdash y : \text{ref}(\alpha_2)\\ 
+&\alpha_2 \unlhd \alpha_1 \\
+\hline 
+&A \vdash \text{welltyped(x = y)}
+\end{eqnarray*}
+\]
+
+</section>
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x : \text{ref}(\tau \times \_)\\
+&A \vdash y : \tau\\
+\hline 
+&A \vdash \text{welltyped(x = &y)}
+\end{eqnarray*}
+\]
+
+</section>
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x : \text{ref}(\alpha_1)\\
+&A \vdash y : \text{ref}(\text{ref}(\alpha_2) \times \_)\\ 
+&\alpha_1 \unlhd \alpha_2 \\
+\hline 
+&A \vdash \text{welltyped(x = *y)}
+\end{eqnarray*}
+\]
+</section>
+
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x : \text{ref}(\alpha)\\
+&A \vdash y_i : \text{ref}(\alpha_i)\\ 
+&\forall i \in [1 ... n] :\alpha_i \unlhd \alpha \\
+\hline 
+&A \vdash \text{welltyped(x = op($y_1$ ... $y_n$))}
+\end{eqnarray*}
+\]
+</section>
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x : \text{ref}(\text{ref}(\_) \times \_)\\
+\hline 
+&A \vdash \text{welltyped(x = allocate(y))}
+\end{eqnarray*}
+\]
+</section>
+
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x : \text{ref}(\text{ref}(\alpha_1) \times \_)\\
+&A \vdash y : \text{ref}(\alpha_2)\\ 
+&\alpha_2 \unlhd \alpha_1 \\
+\hline 
+&A \vdash \text{welltyped(*x = y)}
+\end{eqnarray*}
+\]
+</section>
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x : \text{ref}(\_ \times \text{lam}(\alpha_1 ... \alpha_n) (\alpha_{n+1} ... \alpha_{n+m}))\\
+&A \vdash f_i : \text{ref}(\alpha_i)\\ 
+&A \vdash r_j : \text{ref}(\alpha_{n+j})\\ 
+&\forall s \in S* : A \vdash \text{welltyped($s$)} \\
+\hline 
+&A \vdash \text{welltyped(x = fun($f_1$ ... $f_n$) $\rightarrow$ ($r_1$ ... $r_m$) S*)}
+\end{eqnarray*}
+\]
+</section>
+
+
+<section>
+<h2>Type Rules</h2>
+\[
+\begin{eqnarray*}
+&A \vdash x_j : \text{ref}(\alpha'_{n +j })\\
+&A \vdash p : \text{ref}(\_ \times \text{lam}(\alpha_1 ... \alpha_n) (\alpha_{n+1} ... \alpha_{n+m}))\\
+&A \vdash y_i : \text{ref}(\alpha'_i)\\ 
+&\forall i \in [1 ... n] : \alpha'_i \unlhd a_i \\
+&\forall j \in [1 ... m] : \alpha_{n+j} \unlhd a'_{n+j} \\
+\hline 
+&A \vdash \text{welltyped($x_1$...$x_n$ = p($y_1$ ... $y_n$))}
+\end{eqnarray*}
+\]
+</section>
+
+<section data-markdown>
+## Results
+
+* Analysis takes 4 times the amount of time it takes to traverse the program nodes
+</section>
+
+<section data-markdown>
+## Results
+
+* This shows a histogram of equivalence class sizes on an unoptimized program
+
+![Table1](tb1.png)
+
+</section>
+
+<section data-markdown>
+## Results
+* This shows a histogram of equivalence class sizes for variables whose address is taken on
+  an unoptimized program
+
+![Table2](tb2.png)
+
+</section>
+
+<section data-markdown>
+## Results
+* This shows a histogram of equivalence class sizes for variables whose address is taken on
+  an optimized program
+
+![Table3](tb3.png)
+
+</section>
+
+
+<section data-markdown>
+## Contributions and Limitations
+
+* First method to be practical on large programs
+
+* Used unification, a well understood method in type theory, and applied it to pointer analysis
+
+* The algorithm is field insensitive
+
+* The notion of equivalence sets does not differentiate between `x = y` and `y = x` which 
+  makes the analysis less precise
+
+</section>
+
+<section data-markdown>
+## Previous Work
+* Andersen's algorithm is a subset based method that is more precise than Steensgard, 
+  but takes quadratic time in the number of alias nodes (approximately 30 times slower than Steensgard)
+</section>
+
+<section data-markdown>
+## Recent Work
+* Detect and merge cycles in Andersen's algorithm
+* Flow sensitivity, context sensitivity, heap modeling, aggregate modeling
+* Limited field and object sensitivity based on programming language semantics 
+* Use binary decision diagrams to perform flow sensitive analysis
+* Use CFL reachability to perform field sensitive analysis
+</section>
+
+<section data-markdown>
+# Questions
+</section>
+
+<section data-markdown>
+# Thank you
+</section>
+
+
+</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/math/math.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
