@@ -657,5 +657,130 @@ They mention a few advantages of the special purpose FFTW compiler:
 
 ### Lecture Notes on Static Analysis
 
+    http://www.itu.dk/people/brabrand/UFPE/Data-Flow-Analysis/static.pdf
+    http://web.cs.wpi.edu/~kal/PLT/
+
 * Rice's theorem stated in 1953 that all interesting questions about the behavior of a program are undecidable.
-* 
+* A partial order $L = (S, \sqsubseteq)$ is a mathematical structure where $S$ is a a set and $\sqsubseteq$ is a binary relation such as:
+    - $\sqsubseteq$ is reflexive : $\forall x \in S : x \sqsubseteq x$
+    - $\sqsubseteq$ is transitive: $\forall x, y, z \in S \mbox{ if } x \sqsubseteq y \mbox{ and } y \sqsubseteq z \mbox{ then } x \sqsubseteq z$
+    - $\sqsubseteq$ is anti-symmetric: $\forall x, y \in S : x \sqsubseteq y \wedge y \sqsubseteq x \Rightarrow x = y$
+* $y$ uppper bound of a partial order $L = (S, \sqsubseteq)$ $\Rightarrow$ for $X \subseteq Y$ there exists a $y \in S$ such that $X \sqsubseteq y$ ($\forall x \in X : x \sqsubseteq y$).
+* $\sqcap X$ is the least upper bound iff $X \sqsubseteq X \wedge \forall y \in S : X \sqsubseteq y \Rightarrow \sqcap X \sqsubseteq y$
+* A similar definition is for the lower bound and greatest lower bound.
+* A *lattice* $L = (S, \sqsubseteq)$ is a partial order where the upper bound $\sqcup X$ and lower bound $\sqcap X$ exist for all $X \subseteq S$
+* Usually top $\top = \sqcup S$ and $\bot = \sqcap S$
+* A function $f : L \rightarrow L$ is *monotone* iff $\forall x, y \in S : x \sqsubseteq y \Rightarrow f(x) \sqsubseteq f(y)$. It is desirable for a lattice's transfer function to be *monotone* since it means that the meet over paths is equal to the maximal fixed point.
+
+#### Pointer Analysis
+
+##### Andersen's Algorithm
+
+##### Steensgaard's Algorithm
+
+
+#### Live Analysis
+
+A monotone framework $L = (2^{\lbrace vars \rbrace}, \subseteq)$ with $In(BB) = \cup_{w \in succ(BB)} Out(w)$ and $Out(BB) = Gen(BB) \cup (In(BB) \backslash Kill(BB))$.
+This is a forward may problem.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~
+prog = Program[{
+    BasicBlock["Id" -> 1, "Parent" -> Null, "Instructions" -> {
+       Instruction["Store", {"x", "y"}],
+       Instruction["Store", {"y", "z"}],
+       Instruction["Branch", {"y", 2, 3}]
+       }],
+    BasicBlock["Id" -> 2, "Parent" -> 1, "Instructions" -> {
+       Instruction["Store", {"p", "s"}],
+       Instruction["Store", {"q", "z"}]
+       }],
+    BasicBlock["Id" -> 3, "Parent" -> 1, "Instructions" -> {
+       Instruction["Store", {"y", "s"}],
+       Instruction["Store", {"q", "z"}]
+       }]
+    }];
+ClearAll[gen];
+gen[Instruction[_, {_, vars__}]] := Sequence @@ Select[{vars}, StringQ]
+gen[BasicBlock["Id" -> i_, ___, "Instructions" -> lst_]] := gen /@ lst
+gen[Program[bbs_]] := gen /@ bbs
+
+ClearAll[kill];
+kill[Instruction["Store", {x_, vars__}]] := x
+kill[BasicBlock["Id" -> i_, ___, "Instructions" -> lst_]] := 
+ kill /@ lst
+kill[Program[bbs_]] := kill /@ bbs
+kill[___] := Sequence[]
+
+ClearAll[bbs, pred, succ]
+populateBasicBlocks[Program[blocks_]] :=
+ Module[{go},
+  pred[_] := {};
+  succ[_] := {};
+  go[bb : BasicBlock["Id" -> i_, "Parent" -> p_, ___]] := Module[{},
+    bbs[i] = bb;
+    If[p =!= Null,
+     pred[i] = AppendTo[pred[i], p];
+     succ[p] = AppendTo[succ[p], i];
+     ];
+    ];
+  go /@ blocks;
+  ]
+
+populateBasicBlocks[prog];
+
+changed = True;
+ClearAll[in, out];
+in[___] := {}
+Module[{go, new},
+ While[changed == True,
+  changed = False;
+  go[bb : BasicBlock["Id" -> i_, ___]] :=
+   (
+    in[i] = Union[Flatten[out /@ succ[i]]];
+    new = Union[gen[bb], Complement[in[i], kill[bb]]];
+    If[new =!= out[i],
+     out[i] = new;
+     changed = True
+     ]
+    );
+  go /@ (prog /. Program -> Sequence)
+  ]
+ ]
+
+In[132]:= Table[
+ Through[{in, out}[ii]],
+ {ii, 1, 3}
+ ]
+
+Out[132]= {{{"s", "z"}, {"s", "y", "z"}}, {{}, {"s", "z"}}, {{}, {"s",
+    "z"}}}
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#### Available Expressions
+
+An expression $a$ is available at a program point if its current value has already been computed at an earlier execution. The is a forward must problem.
+A monotone framework $L = (2^{\lbrace expr \rbrace}, \supseteq)$ with $In(BB) = \cap_{w \in pred(BB)} Out(w)$ and $Out(BB) = Gen(BB) \cup (In(BB) \backslash Kill(BB))$
+
+
+
+#### Very Busy Expressions
+
+An expression $a$ is very buys at a program point if will definitely be reevaluated before its value changes. This is a backward must problem.
+A monotone framework $L = (2^{\lbrace expr \rbrace}, \supseteq)$ with $Out(BB) = \cap_{s \in succ(BB)} In(s)$ and $In(BB) = Gen(BB) \cap (Out(BB) \backslash Kill(BB))$. 
+
+
+#### Reaching Definitions
+
+A monotone framework $L = (2^{\lbrace vars \rbrace}, \supseteq) $ with $Out(BB) = \cup_{s \in pred(BB)} Out(BB)$ and $In(BB) = Gen(BB) \cap (Out(BB) \backslash Kill(BB)$. Forward may problem.
+
+
+#### Reaching Uses
+
+$Out(BB) = \cup_{s \in succ(BB)} Out(BB)$ and $In(BB) = Gen(BB) \cap (Out(BB) \backslash Kill(BB)$. Backward may problem.
+
+#### Reaching Constants
+
+A monotone framework $L = (2^{\lbrace vars \times c \rbrace}, \subseteq) $ with $\wedge = \cap_{p \in pred(BB)}$, $\top = v \times c$, and $\bot = \emptyset$.A monotone framework $L = (2^{\lbrace vars \times c \rbrace}, \subseteq) $ with $\wedge = \cap_{p \in pred(BB)}$, $\top = v \times c$, and $\bot = \emptyset$.
+
