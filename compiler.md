@@ -654,3 +654,8 @@ They mention a few advantages of the special purpose FFTW compiler:
 #### Algorithm
 
 #### Conclusions
+
+### Lecture Notes on Static Analysis
+
+* Rice's theorem stated in 1953 that all interesting questions about the behavior of a program are undecidable.
+* 
