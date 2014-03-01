@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="latin1"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<g font-family="monospace" font-size="14px">
+<text x="0" y="14" xml:space="preserve">less&#160;<tspan fill="#333333">=</tspan>&#160;fun(a,&#160;b)&#160;<tspan fill="#333333">-</tspan><tspan fill="#333333">&gt;</tspan>&#160;(res)</text>
+<text x="0" y="33" xml:space="preserve">&#160;&#160;tmp0&#160;<tspan fill="#333333">=</tspan>&#160;fless(a,&#160;b)</text>
+<text x="0" y="52" xml:space="preserve">&#160;&#160;tmp1&#160;<tspan fill="#333333">=</tspan>&#160;feq(a,&#160;b)</text>
+<text x="0" y="71" xml:space="preserve">&#160;&#160;tmp2&#160;<tspan fill="#333333">=</tspan>&#160;fless(a,&#160;b)</text>
+<text x="0" y="90" xml:space="preserve">&#160;&#160;tmp3&#160;<tspan fill="#333333">=</tspan>&#160;and(tmp1,&#160;tmp2)</text>
+<text x="0" y="109" xml:space="preserve">&#160;&#160;res&#160;<tspan fill="#333333">=</tspan>&#160;or(tmp0,&#160;tmp3)</text>
+<text x="0" y="128" xml:space="preserve">swap&#160;<tspan fill="#333333">=</tspan>&#160;fun(<tspan fill="#333333">*</tspan>a,&#160;<tspan fill="#333333">*</tspan>b)&#160;<tspan fill="#333333">-</tspan><tspan fill="#333333">&gt;</tspan>&#160;(<tspan fill="#333399" font-weight="bold">void</tspan>)</text>
+<text x="0" y="147" xml:space="preserve">&#160;&#160;tmp&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#333333">*</tspan>a</text>
+<text x="0" y="166" xml:space="preserve">&#160;&#160;<tspan fill="#333333">*</tspan>a&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#333333">*</tspan>b</text>
+<text x="0" y="185" xml:space="preserve">&#160;&#160;<tspan fill="#333333">*</tspan>b&#160;<tspan fill="#333333">=</tspan>&#160;tmp</text>
+<text x="0" y="204" xml:space="preserve">&#160;&#160;<tspan fill="#333399" font-weight="bold">void</tspan>&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#0000DD" font-weight="bold">0</tspan></text>
+<text x="0" y="223" xml:space="preserve">bubbleSort&#160;<tspan fill="#333333">=</tspan>&#160;fun(<tspan fill="#333333">*</tspan>pts,&#160;len)&#160;<tspan fill="#333333">-</tspan><tspan fill="#333333">&gt;</tspan>&#160;(<tspan fill="#333399" font-weight="bold">void</tspan>)</text>
+<text x="0" y="242" xml:space="preserve">&#160;&#160;swapped&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#007020">true</tspan>;</text>
+<text x="0" y="261" xml:space="preserve">&#160;&#160;<tspan fill="#008800" font-weight="bold">while</tspan>&#160;(swapped)&#160;{</text>
+<text x="0" y="280" xml:space="preserve">&#160;&#160;&#160;&#160;ii&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#0000DD" font-weight="bold">1</tspan>;</text>
+<text x="0" y="299" xml:space="preserve">&#160;&#160;&#160;&#160;swapped&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#007020">false</tspan>;</text>
+<text x="0" y="318" xml:space="preserve">&#160;&#160;&#160;&#160;<tspan fill="#008800" font-weight="bold">while</tspan>&#160;(ii&#160;<tspan fill="#333333">&lt;</tspan>&#160;len)&#160;{</text>
+<text x="0" y="337" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;ptsii_1&#160;<tspan fill="#333333">=</tspan>&#160;add(pts,&#160;subtract(ii,&#160;<tspan fill="#0000DD" font-weight="bold">1</tspan>));</text>
+<text x="0" y="356" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;ptsii&#160;<tspan fill="#333333">=</tspan>&#160;add(pts,&#160;ii);</text>
+<text x="0" y="375" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;prev&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#333333">&amp;</tspan>ptsii_1;</text>
+<text x="0" y="394" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;curr&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#333333">&amp;</tspan>pts_ii;</text>
+<text x="0" y="413" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;dprev&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#333333">*</tspan>prev;</text>
+<text x="0" y="432" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;dcurr&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#333333">*</tspan>curr;</text>
+<text x="0" y="451" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;<tspan fill="#008800" font-weight="bold">if</tspan>&#160;(less(dprev,&#160;dcurr))&#160;{</text>
+<text x="0" y="470" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;swap(prev,&#160;curr);</text>
+<text x="0" y="489" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;swapped&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#007020">true</tspan>;</text>
+<text x="0" y="508" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;}</text>
+<text x="0" y="527" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;ii&#160;<tspan fill="#333333">=</tspan>&#160;iadd(ii,&#160;<tspan fill="#0000DD" font-weight="bold">1</tspan>);</text>
+<text x="0" y="546" xml:space="preserve">&#160;&#160;&#160;&#160;}</text>
+<text x="0" y="565" xml:space="preserve">&#160;&#160;}</text>
+<text x="0" y="584" xml:space="preserve">&#160;&#160;<tspan fill="#333399" font-weight="bold">void</tspan>&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#0000DD" font-weight="bold">0</tspan></text>
+<text x="0" y="603" xml:space="preserve">lenA&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#0000DD" font-weight="bold">4</tspan>;</text>
+<text x="0" y="622" xml:space="preserve">lenB&#160;<tspan fill="#333333">=</tspan>&#160;<tspan fill="#0000DD" font-weight="bold">4</tspan>;</text>
+<text x="0" y="641" xml:space="preserve">A&#160;<tspan fill="#333333">=</tspan>&#160;allocate(lenA);</text>
+<text x="0" y="660" xml:space="preserve">A&#160;<tspan fill="#333333">=</tspan>&#160;allocate(lenA);</text>
+<text x="0" y="679" xml:space="preserve">A&#160;<tspan fill="#333333">=</tspan>&#160;{{<tspan fill="#0000DD" font-weight="bold">0</tspan>,<tspan fill="#0000DD" font-weight="bold">0</tspan>},&#160;{<tspan fill="#0000DD" font-weight="bold">0</tspan>,<tspan fill="#0000DD" font-weight="bold">1</tspan>},&#160;{<tspan fill="#0000DD" font-weight="bold">1</tspan>,<tspan fill="#0000DD" font-weight="bold">1</tspan>},&#160;{<tspan fill="#0000DD" font-weight="bold">1</tspan>,<tspan fill="#0000DD" font-weight="bold">0</tspan>}};</text>
+<text x="0" y="698" xml:space="preserve">B&#160;<tspan fill="#333333">=</tspan>&#160;{{<tspan fill="#0000DD" font-weight="bold">1</tspan>,<tspan fill="#0000DD" font-weight="bold">0</tspan>},&#160;{<tspan fill="#0000DD" font-weight="bold">1</tspan>,<tspan fill="#0000DD" font-weight="bold">1</tspan>},&#160;{<tspan fill="#0000DD" font-weight="bold">0</tspan>,<tspan fill="#0000DD" font-weight="bold">1</tspan>},&#160;{<tspan fill="#0000DD" font-weight="bold">0</tspan>,<tspan fill="#0000DD" font-weight="bold">0</tspan>}};</text>
+<text x="0" y="717" xml:space="preserve">bubbleSort(A,&#160;lenA);</text>
+<text x="0" y="736" xml:space="preserve">bubbleSort(B,&#160;lenB);</text>
+<text x="0" y="755" xml:space="preserve"><tspan fill="#008800" font-weight="bold">return</tspan>(<tspan fill="#0000DD" font-weight="bold">0</tspan>);</text>
+<text x="0" y="774" xml:space="preserve"></text></g></svg>

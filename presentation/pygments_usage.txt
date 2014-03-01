@@ -1,0 +1,1 @@
+pygmentize -f svg -O full -l c -o prog_steen.svg prog_steen.mc
