@@ -1,0 +1,29 @@
+$$
+\begin{aligned}
+\text{fless} :& \tau_{0} = \text{\bf ref}(\_ \times \text{\bf lam}(\alpha_1, \alpha_2)(\alpha_3))\\
+\text{and}   :& \tau_{1} = \text{\bf ref}(\_ \times \text{\bf lam}(\alpha_4, \alpha_5)(\alpha_6))\\
+\text{lessa} :& \tau_{2} = \text{\bf ref}(\alpha_7) \\
+\text{lessb} :& \tau_{3} = \text{\bf ref}(\alpha_8) \\
+\text{res}   :& \tau_{4} = \text{\bf ref}(\alpha_9) \\
+\text{less}  :& \tau_{5} = \text{\bf ref}(\_ \times \text{\bf lam}(\alpha_7, \alpha_8)(\alpha_9)) \\
+             & \tau_1 \sim \gamma_{10}\\
+             & \tau_2 \sim \gamma_{11}\\
+\text{tmp0} :& \tau_5 = \text{\bf ref}(\gamma_{12}) \qquad \text{\it // \ldots fless(a,b)}\\
+             & \tau_1 \sim \gamma_{20}\\
+             & \tau_2 \sim \gamma_{21}\\
+\text{tmp1} :& \tau_6 = \text{\bf ref}(\gamma_{22}) \qquad \text{\it // \ldots feq(a,b)} \\
+             & \tau_1 \sim \gamma_{30}\\
+             & \tau_2 \sim \gamma_{31}\\
+\text{tmp2} :& \tau_7 = \text{\bf ref}(\gamma_{32}) \qquad \text{\it // \ldots fless(a,b)}\\
+             & \tau_6 \sim \gamma_{40}\\
+             & \tau_7 \sim \gamma_{41}\\
+\text{tmp3} :& \tau_8 = \text{\bf ref}(\gamma_{42}) \qquad \text{\it // \ldots and(tmp1,tmp2)}\\
+             & \tau_5 \sim \gamma_{50}\\
+             & \tau_8 \sim \gamma_{51}\\
+             & \tau_3 \sim \gamma_{52} \qquad \text{\it // \ldots or(tmp0,tmp3)}\\
+\text{sizeA}:& \tau_9 = \text{\bf ref}(\bot \times \bot) \\
+\text{A}    :& \tau_{10} \text{\bf ref}(\text{\bf ref}(\_) \times \_) \\
+
+
+\end{aligned}
+$$
