@@ -1,20 +1,17 @@
-less = fun(lessa, lessb) -> (res)
-	tmp0 = fless(lessa, lessb)
-	tmp1 = fless(lessa, lessb)
-	res = and(tmp1, tmp2)
-sizeA = 32
-A = allocate(sizeA)
-A0 = iadd(A, 0)
-*A0 = 00
-A1 = iadd(A, 8)
-*A1 = 01
-A1 = iadd(A, 16)
-*A2 = 11
-A1 = iadd(A, 24)
-*A3 = 10
-g = less(A0, A1)
+lessX = fun(lessa, lessb) -> (res)
+	res = fpless(lessa, lessb)
+v00 = 00
+v01 = 01
+A = allocate(8)
+*A = v00
+B = v01
+A0 = *A
+pA0 = &A0
+pB = &B
+g = lessX(pA0, pB)
 if g then
-	less(A1, A2)
+	pC = &A0
 else
-	less(A2, A3)
+	pC = &B
 end
+k = lessX(pB, pA0)

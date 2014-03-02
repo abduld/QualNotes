@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<g font-family="monospace" font-size="14px">
+<text x="0" y="14" xml:space="preserve">lessX&#160;<tspan fill="#666666">=</tspan>&#160;fun(lessa,&#160;lessb)&#160;<tspan fill="#666666">-</tspan><tspan fill="#666666">&gt;</tspan>&#160;(res)</text>
+<text x="0" y="33" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;res&#160;<tspan fill="#666666">=</tspan>&#160;fpless(lessa,&#160;lessb)</text>
+<text x="0" y="52" xml:space="preserve">v00&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">00</tspan></text>
+<text x="0" y="71" xml:space="preserve">v01&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">01</tspan></text>
+<text x="0" y="90" xml:space="preserve">A&#160;<tspan fill="#666666">=</tspan>&#160;allocate(<tspan fill="#666666">8</tspan>)</text>
+<text x="0" y="109" xml:space="preserve"><tspan fill="#666666">*</tspan>A&#160;<tspan fill="#666666">=</tspan>&#160;v00</text>
+<text x="0" y="128" xml:space="preserve">B&#160;<tspan fill="#666666">=</tspan>&#160;v01</text>
+<text x="0" y="147" xml:space="preserve">A0&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">*</tspan>A</text>
+<text x="0" y="166" xml:space="preserve">pA0&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">&amp;</tspan>A0</text>
+<text x="0" y="185" xml:space="preserve">pB&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">&amp;</tspan>B</text>
+<text x="0" y="204" xml:space="preserve">g&#160;<tspan fill="#666666">=</tspan>&#160;lessX(pA0,&#160;pB)</text>
+<text x="0" y="223" xml:space="preserve"><tspan fill="#008000" font-weight="bold">if</tspan>&#160;g&#160;then</text>
+<text x="0" y="242" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;pC&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">&amp;</tspan>A0</text>
+<text x="0" y="261" xml:space="preserve"><tspan fill="#008000" font-weight="bold">else</tspan></text>
+<text x="0" y="280" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;pC&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">&amp;</tspan>B</text>
+<text x="0" y="299" xml:space="preserve">end</text>
+<text x="0" y="318" xml:space="preserve">k&#160;<tspan fill="#666666">=</tspan>&#160;lessX(pB,&#160;pA0)</text>
+<text x="0" y="337" xml:space="preserve"></text></g></svg>

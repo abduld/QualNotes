@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<g font-family="monospace" font-size="14px">
+<text x="0" y="14" xml:space="preserve"><tspan fill="#008000" font-weight="bold">typedef</tspan>&#160;<tspan fill="#008000" font-weight="bold">struct</tspan>&#160;{</text>
+<text x="0" y="33" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<tspan fill="#B00040">float</tspan>&#160;x,&#160;y;</text>
+<text x="0" y="52" xml:space="preserve">}&#160;Point_t;</text>
+<text x="0" y="71" xml:space="preserve"><tspan fill="#B00040">bool</tspan>&#160;<tspan fill="#0000FF">lessX</tspan>(Point_t&#160;<tspan fill="#666666">*</tspan>&#160;a,&#160;Point_t&#160;<tspan fill="#666666">*</tspan>&#160;b)&#160;{</text>
+<text x="0" y="90" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<tspan fill="#008000" font-weight="bold">return</tspan>&#160;a<tspan fill="#666666">-</tspan><tspan fill="#666666">&gt;</tspan>x&#160;<tspan fill="#666666">&lt;</tspan>&#160;b<tspan fill="#666666">-</tspan><tspan fill="#666666">&gt;</tspan>x;</text>
+<text x="0" y="109" xml:space="preserve">}</text>
+<text x="0" y="128" xml:space="preserve">...</text>
+<text x="0" y="147" xml:space="preserve">Point_t&#160;A[<tspan fill="#666666">1</tspan>]&#160;<tspan fill="#666666">=</tspan>&#160;{{<tspan fill="#666666">0</tspan>,&#160;<tspan fill="#666666">0</tspan>}};</text>
+<text x="0" y="166" xml:space="preserve">Point_t&#160;B&#160;<tspan fill="#666666">=</tspan>&#160;{<tspan fill="#666666">0</tspan>,&#160;<tspan fill="#666666">1</tspan>};</text>
+<text x="0" y="185" xml:space="preserve">Point_t&#160;<tspan fill="#666666">*</tspan>&#160;pC;</text>
+<text x="0" y="204" xml:space="preserve"><tspan fill="#B00040">bool</tspan>&#160;g&#160;<tspan fill="#666666">=</tspan>&#160;lessX(<tspan fill="#666666">&amp;</tspan>A[<tspan fill="#666666">0</tspan>],&#160;<tspan fill="#666666">&amp;</tspan>B);</text>
+<text x="0" y="223" xml:space="preserve"><tspan fill="#008000" font-weight="bold">if</tspan>&#160;(g)&#160;{</text>
+<text x="0" y="242" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;pC&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">&amp;</tspan>A[<tspan fill="#666666">0</tspan>];</text>
+<text x="0" y="261" xml:space="preserve">}&#160;<tspan fill="#008000" font-weight="bold">else</tspan>&#160;{</text>
+<text x="0" y="280" xml:space="preserve">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;pC&#160;<tspan fill="#666666">=</tspan>&#160;<tspan fill="#666666">&amp;</tspan>B;</text>
+<text x="0" y="299" xml:space="preserve">}</text>
+<text x="0" y="318" xml:space="preserve"><tspan fill="#B00040">bool</tspan>&#160;k&#160;<tspan fill="#666666">=</tspan>&#160;lessX(<tspan fill="#666666">&amp;</tspan>B,&#160;<tspan fill="#666666">&amp;</tspan>A[<tspan fill="#666666">0</tspan>]);</text>
+<text x="0" y="337" xml:space="preserve"></text></g></svg>

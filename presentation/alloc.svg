@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<g font-family="monospace" font-size="14px">
+<text x="0" y="14" xml:space="preserve">memcpy(A,&#160;B,&#160;sz);</text>
+<text x="0" y="33" xml:space="preserve">memcpy(B,&#160;C,&#160;sz);</text>
+<text x="0" y="52" xml:space="preserve">memset(B,&#160;<tspan fill="#666666">0</tspan>,&#160;sz);</text>
+<text x="0" y="71" xml:space="preserve">strcmp(s1,&#160;s2);</text>
+<text x="0" y="90" xml:space="preserve">strcmp(s2,&#160;s3);</text>
+<text x="0" y="109" xml:space="preserve"></text></g></svg>
