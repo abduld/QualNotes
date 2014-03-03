@@ -11,25 +11,41 @@ $$
 
 
 
-\text{v00}:   & \tau_{5} = \text{\bf ref}(\bot \times \bot) \\
-\text{v01}:   & \tau_{6} = \text{\bf ref}(\bot \times \bot) \\
+\text{v00}:   & \tau_{5} = \text{\bf ref}(\bot \times \bot) = \text{\bf ref}(\alpha_{7}) \\
+\text{v01}:   & \tau_{6} = \text{\bf ref}(\bot \times \bot) = \text{\bf ref}(\alpha_{8}) \\
 \text{A}     :& \tau_{10} = \text{\bf ref}(\text{\bf ref}(\_) \times \_) \\
-\text{A}     :& \tau_{10} = \text{\bf ref}(\tau_{5} \times \_) \\
-\text{B}     :& \tau_{11} = \tau_{6} \\
-\text{A0}    :& \tau_{12} = \tau_{5} \\
-\text{pA0}   :& \tau_{13} = \text{\bf ref}(\tau_{5} \times \_) \\
-\text{pB}    :& \tau_{14} = \text{\bf ref}(\tau_{6} \times \_) \\
-			  & \tau_{5} \unlhd \alpha_{4} \\
-			  & \tau_{6} \unlhd \alpha_{5} \\
+\text{A}     :& \tau_{10} = \text{\bf ref}(\text{\bf ref}(\alpha_9) \times \_) \\
+			  & \alpha_{7} \unlhd \alpha{9} \\
+
+
+
+\text{B}     :& \tau_{11} = \text{\bf ref}(\alpha_{10}) \\
+			  & \alpha_{8} \unlhd \alpha{10} \\
+\text{A0}    :& \tau_{12} = \text{\bf ref}(\alpha_{11}) \\
+			  & \alpha_{9} \unlhd \alpha{11} \\
+\text{pA0}   :& \tau_{13} = \text{\bf ref}(\tau_{12} \times \_) \\
+\text{pB}    :& \tau_{14} = \text{\bf ref}(\tau_{11} \times \_) \\
+
+
+			  & \tau_{13} \unlhd \alpha_{4} \\
+			  & \tau_{14} \unlhd \alpha_{5} \\
 \text{g}     :& \tau_{15} = \text{\bf ref}(\bot \times \bot) \\
-\text{pC}    :& \tau_{16} = \text{\bf ref}(\tau_{5} \times \_) \\
-\text{pC}    :& \tau_{16} = \text{\bf ref}(\tau_{6} \times \_) \\
-			  & \tau_{5} = \tau_{6} \\
-			  & \tau_{6} = \alpha_{4} \\
-			  & \tau_{5} = \alpha_{5} \\
+
+
+\text{pC}    :& \tau_{16} = \text{\bf ref}(\tau_{12} \times \_) \\
+\text{pC}    :& \tau_{16} = \text{\bf ref}(\tau_{11} \times \_) \\
+			  & \tau_{12} = \tau_{11} \\
+			  & \alpha_{10} = \alpha_{11} \\
+
+
+			  & \tau_{14} \unlhd \alpha_{4} \\
+			  & \tau_{13} \unlhd \alpha_{5} \\
 \text{g}     :& \tau_{15} = \text{\bf ref}(\bot \times \bot)
 
 \end{aligned}
 $$
 
-$$\begin{aligned}  \text{v00}:   & \tau_{5} = \text{\bf ref}(\bot \times \bot) \\ \text{v01}:   & \tau_{6} = \text{\bf ref}(\bot \times \bot) \\   \text{A}     :& \tau_{10} = \text{\bf ref}(\text{\bf ref}(\_) \times \_) \\  \text{A}     :& \tau_{10} = \text{\bf ref}(\tau_{5} \times \_) \\  \text{B}     :& \tau_{11} = \tau_{6} \\ \text{A0}    :& \tau_{12} = \tau_{5} \\ \text{pA0}   :& \tau_{13} = \text{\bf ref}(\tau_{5} \times \_) \\ \text{pB}    :& \tau_{14} = \text{\bf ref}(\tau_{6} \times \_) \\ & \tau_{5} \unlhd \alpha_{4} \\ & \tau_{6} \unlhd \alpha_{5} \\ \text{g}     :& \tau_{15} = \text{\bf ref}(\bot \times \bot) \\ \text{pC}    :& \tau_{16} = \text{\bf ref}(\tau_{5} \times \_) \\ \text{pC}    :& \tau_{16} = \text{\bf ref}(\tau_{6} \times \_) \\ & \tau_{5} = \tau_{6} \\ & \tau_{6} = \alpha_{4} \\ & \tau_{5} = \alpha_{5} \\ \text{g}     :& \tau_{15} = \text{\bf ref}(\bot \times \bot) \end{aligned}$$
+
+$$
+\begin{aligned} \text{v00}: & \tau_{5} = \text{\bf ref}(\bot \times \bot) = \text{\bf ref}(\alpha_{7}) \\ \text{v01}: & \tau_{6} = \text{\bf ref}(\bot \times \bot) = \text{\bf ref}(\alpha_{8}) \\ \text{A} :& \tau_{10} = \text{\bf ref}(\text{\bf ref}(\_) \times \_) \\ \text{A} :& \tau_{10} = \text{\bf ref}(\text{\bf ref}(\alpha_9) \times \_) \\ & \alpha_{7} \unlhd \alpha{9} \\ \text{B} :& \tau_{11} = \text{\bf ref}(\alpha_{10}) \\ & \alpha_{8} \unlhd \alpha{10} \\ \text{A0} :& \tau_{12} = \text{\bf ref}(\alpha_{11}) \\ & \alpha_{9} \unlhd \alpha{11} \\ \text{pA0} :& \tau_{13} = \text{\bf ref}(\tau_{12} \times \_) \\ \text{pB} :& \tau_{14} = \text{\bf ref}(\tau_{11} \times \_) \\ & \tau_{13} \unlhd \alpha_{4} \\ & \tau_{14} \unlhd \alpha_{5} \\ \text{g} :& \tau_{15} = \text{\bf ref}(\bot \times \bot) \\ \text{pC} :& \tau_{16} = \text{\bf ref}(\tau_{12} \times \_) \\ \text{pC} :& \tau_{16} = \text{\bf ref}(\tau_{11} \times \_) \\ & \tau_{12} = \tau_{11} \\ & \alpha_{10} = \alpha_{11} \\ & \tau_{14} \unlhd \alpha_{4} \\ & \tau_{13} \unlhd \alpha_{5} \\ \text{g} :& \tau_{15} = \text{\bf ref}(\bot \times \bot) \end{aligned}
+$$
