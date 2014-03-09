@@ -232,9 +232,24 @@ Let $S_1$ and $S_2$ be two statements, we define:
 
 #### Main Idea
 
+Perform software piplining to maximize ILP.
+
+
+* Simplifies software pipelining by using the same schedule for all iterations of the loop
+* Problems with control flow (can use predicated instructions)
+* Has mechanism to deal with register preasure by using a rotating register table
+
 #### Algorithm
 
-#### Conclusions
+These notes are based on [@ModuloNotes].
+Build a data dependence graph with each vertex being the instruction to be executed and a weighted directed edge exists between $i_1$ and $i_2$ iff $i_1$ preceeds $i_2$ and they use the same memory location.
+Find minimum II (number of cycles between two successive iteratations of the loop) to satisfy the constraints.
+Idealy one would want II to be equal to 1, but that might not satisfy the constraints.
+One can then perform a search, incrementing II until the constraints are satisfied, but this may require a lot of search.
+A better way is to start with $minII$ which is $\frac{\text{Resource}_i \text{ used by loop}}{\text{Resource}_i \text{ in the machine}}$ where $i$ is the type of resources.
+
+The modulo resource table's columns represent the resources while the rows represent subsequent cycles.
+
 
 ### An Overview of the PL.8 Compiler
 
@@ -380,10 +395,15 @@ Compute where to place the $\phi$ functions by computing the dominance frontier 
 #### Algorithm
 
 A node $n$ dominates $m$ if all paths from the start node to $m$ contain the node $n$.
-The dominance graph is composed of
+The dominance tree is a graph $G = (V, E)$ where $V$ are the set of variables in the program and a edge
+    $v_i \rightarrow v_j$ exists iff $v_i \text{ dom } v_j$.
 
+
+
+<!--
 We can compute the dominance graph using a dataflow algorithm with $Dom(start) = \emptyset$ and 
     $Dom(n) = $
+-->
 
 
 #### Conclusions
