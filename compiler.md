@@ -208,7 +208,26 @@ Let $S_1$ and $S_2$ be two statements, we define:
 
 #### Main Idea
 
+#### Definitions
+
+* Loop-Carried Dependence --- the distance vector $d > 0$ i.e. the left most non `=` entry in the dependence distance vector must be `<`.
+* Loop-Independent Dependence --- the distance vector $d = 0$ i.e. all entries in the dependence distance vector must be `=`.
+
 #### Algorithm
+
+#### Loop Transformation Legality[^transformnotes1][^transformnotes2]
+
+* Loop Distribution --- legal if no loop-carried data dependencies exist that are lexically backward
+* Loop Fusion --- legal if does not introduce any lexically backward data dependencies
+* Loop Switching --- always legal
+* Loop Peeling --- always legal (as long as it does not introduce extra iterations)
+* Loop Unrolling --- always legal (as long as it does not introduce extra iterations)
+* Loop Interchange --- 
+* Loop Reversal --- there are no loop carried dependencies
+
+[^transformnotes1]: http://www.cs.colostate.edu/~cs560/Spring2012/ClassNotes/lecture06-parallelization.ppt.pdf (Legality and applying loop transformations by hand)
+
+[^transformnotes2]: https://wiki.engr.illinois.edu/download/attachments/114229250/7-LoopOptimizations.pdf?version=4&modificationDate=1267633588000 (Loop Transformations)
 
 #### Conclusions
 
